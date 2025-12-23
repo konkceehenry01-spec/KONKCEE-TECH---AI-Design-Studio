@@ -2,6 +2,7 @@
 import React from 'react';
 import Logo from './Logo';
 import MeshBackground from './MeshBackground';
+import FloatingUIElements from './FloatingUIElements';
 import { ArrowRight, Box, Cpu, Zap, Globe, Sparkles } from 'lucide-react';
 
 interface LandingPageProps {
@@ -12,9 +13,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterEditor }) => {
   return (
     <div className="relative min-h-screen">
       <MeshBackground />
+      <FloatingUIElements />
       
       {/* Navigation */}
-      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto relative z-10">
         <Logo className="w-40" />
         <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-400">
           <a href="#" className="hover:text-white transition">Features</a>
@@ -31,7 +33,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterEditor }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-8 pt-20 pb-32">
+      <main className="max-w-7xl mx-auto px-8 pt-20 pb-32 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
@@ -84,13 +86,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterEditor }) => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/40 to-transparent"></div>
                 
-                {/* Floating Elements Mock */}
-                <div className="absolute top-10 right-10 w-48 p-4 glass rounded-xl border-white/20 animate-bounce transition-all duration-[3000ms]">
-                   <div className="w-8 h-8 rounded bg-indigo-500 mb-2"></div>
-                   <div className="h-2 w-full bg-white/20 rounded mb-1"></div>
-                   <div className="h-2 w-2/3 bg-white/20 rounded"></div>
-                </div>
-
+                {/* Main Hero Card Overlay */}
                 <div className="absolute bottom-10 left-10 w-64 p-6 glass rounded-2xl border-white/20 shadow-2xl">
                    <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">
@@ -109,7 +105,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterEditor }) => {
       </main>
 
       {/* Comparison Table */}
-      <section className="max-w-5xl mx-auto px-8 py-32 border-t border-white/5">
+      <section className="max-w-5xl mx-auto px-8 py-32 border-t border-white/5 relative z-10">
          <h2 className="text-4xl font-bold text-center mb-16">The KONKCEE-TECH Advantage</h2>
          <div className="grid md:grid-cols-2 gap-8">
             <div className="glass p-8 rounded-3xl border-slate-800">
