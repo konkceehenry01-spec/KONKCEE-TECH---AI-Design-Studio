@@ -58,6 +58,37 @@ const EditorPage: React.FC<EditorPageProps> = ({ onExit }) => {
     setSelectedId(null);
   };
 
+  const addImageElement = () => {
+    const newId = `img-${Date.now()}`;
+    const newElement: DesignElement = {
+      id: newId,
+      type: 'image',
+      x: activeCanvas ? (activeCanvas.width / 2) - 100 : 440,
+      y: activeCanvas ? (activeCanvas.height / 2) - 75 : 225,
+      width: 200,
+      height: 150,
+      content: `https://picsum.photos/seed/${newId}/400/300`,
+      rotation: 0
+    };
+
+    if (activeCanvas) {
+      setActiveCanvas({
+        ...activeCanvas,
+        elements: [...activeCanvas.elements, newElement]
+      });
+    } else {
+      setActiveCanvas({
+        id: `canvas-${Date.now()}`,
+        name: 'New Design',
+        width: 1080,
+        height: 1080,
+        backgroundColor: '#ffffff',
+        elements: [newElement]
+      });
+    }
+    setSelectedId(newId);
+  };
+
   return (
     <div className="h-screen flex flex-col bg-[#0a0a0a] overflow-hidden">
       {/* Top Header */}
@@ -111,7 +142,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ onExit }) => {
           <ToolbarItem icon={<MousePointer2 className="w-5 h-5" />} active label="Select" />
           <ToolbarItem icon={<TypeIcon className="w-5 h-5" />} label="Text" />
           <ToolbarItem icon={<Square className="w-5 h-5" />} label="Shape" />
-          <ToolbarItem icon={<ImageIcon className="w-5 h-5" />} label="Assets" />
+          <ToolbarItem icon={<ImageIcon className="w-5 h-5" />} label="Image" onClick={addImageElement} />
           <ToolbarItem icon={<Layers className="w-5 h-5" />} label="Layers" />
           <div className="mt-auto flex flex-col gap-4">
              <button className="p-2 text-slate-500 hover:text-white"><Undo2 className="w-5 h-5" /></button>
@@ -145,7 +176,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ onExit }) => {
             <div className="h-full flex flex-col items-center justify-center text-slate-500 max-w-md text-center">
                <Sparkles className="w-12 h-12 mb-6 text-indigo-500/50" />
                <h3 className="text-xl font-bold text-white mb-2">Ready to Design?</h3>
-               <p className="text-sm">Type a prompt above like "Minimalist business card for a coffee shop" to see KONKCEE-TECH AI in action.</p>
+               <p className="text-sm">Type a prompt above like "Minimalist business card for a coffee shop" or click the Image icon to start from scratch.</p>
             </div>
           )}
 
@@ -208,8 +239,11 @@ const EditorPage: React.FC<EditorPageProps> = ({ onExit }) => {
 };
 
 // Sub-components
-const ToolbarItem: React.FC<{ icon: React.ReactNode, active?: boolean, label: string }> = ({ icon, active, label }) => (
-  <button className={`flex flex-col items-center gap-1 group relative ${active ? 'text-indigo-500' : 'text-slate-500 hover:text-white'}`}>
+const ToolbarItem: React.FC<{ icon: React.ReactNode, active?: boolean, label: string, onClick?: () => void }> = ({ icon, active, label, onClick }) => (
+  <button 
+    onClick={onClick}
+    className={`flex flex-col items-center gap-1 group relative w-full ${active ? 'text-indigo-500' : 'text-slate-500 hover:text-white'}`}
+  >
     {icon}
     <span className="text-[9px] font-bold uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">{label}</span>
     {active && <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-500 rounded-r"></div>}
@@ -240,7 +274,8 @@ const CanvasElement: React.FC<{ element: DesignElement, isSelected: boolean, onC
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'all 0.2s ease-out'
+    transition: 'all 0.2s ease-out',
+    zIndex: isSelected ? 10 : 1
   };
 
   const renderContent = () => {
@@ -253,7 +288,12 @@ const CanvasElement: React.FC<{ element: DesignElement, isSelected: boolean, onC
             fontWeight: element.fontWeight || 'normal',
             fontFamily: element.fontFamily || 'Inter',
             textAlign: 'center',
-            lineHeight: 1.2
+            lineHeight: 1.2,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}>
             {element.content}
           </div>
@@ -281,7 +321,7 @@ const CanvasElement: React.FC<{ element: DesignElement, isSelected: boolean, onC
           <img 
             src={element.content || `https://picsum.photos/seed/${element.id}/400/400`}
             alt="Canvas asset"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover select-none pointer-events-none"
           />
         );
       default:

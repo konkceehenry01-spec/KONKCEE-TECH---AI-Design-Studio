@@ -3,6 +3,7 @@ import React from 'react';
 import Logo from './Logo';
 import MeshBackground from './MeshBackground';
 import FloatingUIElements from './FloatingUIElements';
+import Footer from './Footer';
 import { ArrowRight, Box, Cpu, Zap, Globe, Sparkles } from 'lucide-react';
 
 interface LandingPageProps {
@@ -153,6 +154,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterEditor }) => {
             </div>
          </div>
       </section>
+
+      <Footer />
     </div>
   );
 };
